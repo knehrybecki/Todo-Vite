@@ -11,17 +11,17 @@ const filtrAll = $('.filtr-all')
 const filtrTodo = $('.filtr-todo')
 const filtrDone = $('.filtr-done')
 
-let todo = []
+let todoArray = []
 
 const createNewTodo = getText => {
     
-    const list = $('<li>', {
+    const todo = $('<li>', {
         class: 'todo__item',
         text: getText,
         'data-id': uuidv4()
     })
 
-    return list
+    return todo
 }
 
 inputText.keyup(event => event.keyCode === 13 ? addTodo() : null)
@@ -40,7 +40,7 @@ const addTodo = () => {
 
         createTodoControls(newTodo)
 
-        todo = todo.concat([
+        todoArray = todoArray.concat([
             {
                 isDone: false,
                 text: inputText.val(),
@@ -76,22 +76,22 @@ const createTodoControls = todoItem => {
     deleteButton.click(event => {
         event.currentTarget.parentElement.parentElement.remove()
         const id = event.currentTarget.parentElement.parentElement.getAttribute('data-id')
-        const index = todo.findIndex(item => {
+        const index = todoArray.findIndex(item => {
             return item.id == id
         })
 
-        todo.pop(index)
+        todoArray.pop(index)
     })
 
     acceptedButton.click(event => {
         event.currentTarget.parentElement.parentElement.classList.add('checked')
         const id = event.currentTarget.parentElement.parentElement.getAttribute('data-id')
 
-        const index = todo.findIndex(item => {
+        const index = todoArray.findIndex(item => {
             return item.id == id
         })
 
-        todo[index].isDone = true 
+        todoArray[index].isDone = true 
     })
 }
 
