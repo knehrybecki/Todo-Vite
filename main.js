@@ -47,7 +47,8 @@ const addTodo = () => {
                 id: newTodo.attr('data-id')
             }
         ])
-
+    }
+    
     inputText.val('')
 }
 
