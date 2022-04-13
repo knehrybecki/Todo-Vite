@@ -26,11 +26,11 @@ const createNewTodo = text => {
 const addTodo = () => {
     if (inputText.val() === '') {
         alert('Please write any text')
+
         return
     }
 
     const newTodo = createNewTodo(inputText.val())
-
     newTodo.appendTo(todoList)
 
     createTodoControls(newTodo)
@@ -72,26 +72,26 @@ const createTodoControls = todoItem => {
     }).appendTo(deleteButton)
     
     deleteButton.click(event => {
-        $(event.target).parent().parent().parent().remove()
+        $(event.target).closest('li').remove()
 
-        const id =  $(event.target).parent().parent().parent().attr('data-id')
+        const id = $(event.target).closest('li').attr('data-id')
         
         const index = todoArray.findIndex(item => {
             return item.id === id
         })
-
-        todoArray.pop(index)
+      
+        todoArray.splice(index, 1)
     })
 
     acceptedButton.click(event => {
-        $(event.target).parent().parent().parent().addClass('checked')
+        $(event.target).closest('li').addClass('checked')
 
-        const id = $(event.target).parent().parent().parent().attr('data-id')
+        const id = $(event.target).closest('li').attr('data-id')
 
         const index = todoArray.findIndex(item => {
             return item.id === id
         })
-
+       
         todoArray[index].isDone = true 
     })
 }
