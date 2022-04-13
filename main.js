@@ -13,44 +13,42 @@ const filtrDone = $('.filtr-done')
 
 let todoArray = []
 
-const createNewTodo = getText => {
-    
+const createNewTodo = text => {   
     const todo = $('<li>', {
         class: 'todo__item',
-        text: getText,
+        text: text,
         'data-id': uuidv4()
     })
 
     return todo
 }
 
-inputText.keyup(event => event.keyCode === 13 ? addTodo() : null)
-
-buttonAddTodo.click(() => addTodo())
-
 const addTodo = () => {
     if (inputText.val() === '') {
-        alert("Please write any text")
+        alert('Please write any text')
+        return
     }
 
-    else {
-        const newTodo = createNewTodo(inputText.val())   
- 
-        newTodo.appendTo(todoList)
+    const newTodo = createNewTodo(inputText.val())
 
-        createTodoControls(newTodo)
+    newTodo.appendTo(todoList)
 
-        todoArray = todoArray.concat([
-            {
-                isDone: false,
-                text: inputText.val(),
-                id: newTodo.attr('data-id')
-            }
-        ])
-    }
-    
-    inputText.val('')
+    createTodoControls(newTodo)
+
+    todoArray = todoArray.concat([
+        {
+            isDone: false,
+            text: inputText.val(),
+            id: newTodo.attr('data-id')
+        }
+    ])
+
+    inputText.val(null)
 }
+
+buttonAddTodo.click(addTodo)
+
+inputText.keyup(event => event.keyCode === 13 ? addTodo() : null)
 
 const createTodoControls = todoItem => {
     const allButton = $('<div>', {
@@ -74,21 +72,24 @@ const createTodoControls = todoItem => {
     }).appendTo(deleteButton)
     
     deleteButton.click(event => {
-        event.currentTarget.parentElement.parentElement.remove()
-        const id = event.currentTarget.parentElement.parentElement.getAttribute('data-id')
+        $(event.target).parent().parent().parent().remove()
+
+        const id =  $(event.target).parent().parent().parent().attr('data-id')
+        
         const index = todoArray.findIndex(item => {
-            return item.id == id
+            return item.id === id
         })
 
         todoArray.pop(index)
     })
 
     acceptedButton.click(event => {
-        event.currentTarget.parentElement.parentElement.classList.add('checked')
-        const id = event.currentTarget.parentElement.parentElement.getAttribute('data-id')
+        $(event.target).parent().parent().parent().addClass('checked')
+
+        const id = $(event.target).parent().parent().parent().attr('data-id')
 
         const index = todoArray.findIndex(item => {
-            return item.id == id
+            return item.id === id
         })
 
         todoArray[index].isDone = true 
