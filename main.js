@@ -30,11 +30,6 @@ const addTodo = () => {
         return
     }
 
-    const newTodo = createNewTodo(inputText.val())
-    newTodo.appendTo(todoList)
-
-    createTodoControls(newTodo)
-
     todoArray = todoArray.concat([
         {
             isDone: false,
@@ -43,12 +38,21 @@ const addTodo = () => {
         }
     ])
 
+     const newTodo = createNewTodo(inputText.val())
+    newTodo.appendTo(todoList)
+
+    createTodoControls(newTodo)
+
     inputText.val(null)
 }
 
 buttonAddTodo.click(addTodo)
 
-inputText.keyup(event => event.keyCode === 13 ? addTodo() : null)
+inputText.keyup(event => {
+    if (event.keyCode === 13) {
+        addTodo()
+    }
+})
 
 const createTodoControls = todoItem => {
     const allButton = $('<div>', {
@@ -59,38 +63,40 @@ const createTodoControls = todoItem => {
         class: 'todo__item-accepted'
     }).appendTo(allButton)
 
-    $('<i>', {
-        class: 'fa-solid fa-check'
-    }).appendTo(acceptedButton)
-
     const deleteButton = $('<button>', {
         class: 'todo__item-deleted'
     }).appendTo(allButton)
+
+    $('<i>', {
+        class: 'fa-solid fa-check'
+    }).appendTo(acceptedButton)
 
     $('<i>', {
         class: 'fa-solid fa-trash'
     }).appendTo(deleteButton)
     
     deleteButton.click(event => {
-        $(event.target).closest('li').remove()
+        $(event.target)
+            .closest('li')
+            .remove()
 
-        const id = $(event.target).closest('li').attr('data-id')
-        
-        const index = todoArray.findIndex(item => {
-            return item.id === id
-        })
+        const id = $(event.target)
+            .closest('li')
+            .attr('data-id')
+        const index = todoArray.findIndex(item => item.id === id)
       
         todoArray.splice(index, 1)
     })
 
     acceptedButton.click(event => {
-        $(event.target).closest('li').addClass('checked')
+        $(event.target)
+            .closest('li')
+            .addClass('checked')
 
-        const id = $(event.target).closest('li').attr('data-id')
-
-        const index = todoArray.findIndex(item => {
-            return item.id === id
-        })
+        const id = $(event.target)
+            .closest('li')
+            .attr('data-id')
+        const index = todoArray.findIndex(item => item.id === id)
        
         todoArray[index].isDone = true 
     })
