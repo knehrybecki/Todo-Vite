@@ -10,12 +10,12 @@ const filtrAll = $('.filtr-all')
 const filtrTodo = $('.filtr-todo')
 const filtrDone = $('.filtr-done')
 
-let todoArray = new Map()
+const todoArray = new Map()
 
 const createNewTodo = text => {   
     const todo = $('<li>', {
         class: 'todo__item',
-        text: text,
+        text,
         'data-id': uuidv4()
     })
 
@@ -34,10 +34,10 @@ const addTodo = () => {
     newTodo.appendTo(todoList)
     createTodoControls(newTodo)
 
-    todoArray.set(newTodo.attr('data-id'),{
-         isDone: false, 
-         text: inputText.val()
-        })
+    todoArray.set(newTodo.attr('data-id'), {
+        isDone: false,
+        text: inputText.val()
+    })
 
     inputText.val(null)
 }
