@@ -32,6 +32,7 @@ const addTodo = () => {
 
     const newTodo = createNewTodo(inputText.val())
     newTodo.appendTo(todoList)
+    createTodoControls(newTodo)
 
     inputText.val(null)
 
@@ -42,8 +43,6 @@ const addTodo = () => {
             id: newTodo.attr('data-id')
         }
     ])
-
-    createTodoControls(newTodo)
 }
 
 buttonAddTodo.click(addTodo)
