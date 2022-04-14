@@ -31,11 +31,11 @@ const addTodo = () => {
     }
 
     const newTodo = createNewTodo(inputText.val())
+
     newTodo.appendTo(todoList)
     createTodoControls(newTodo)
-
     inputText.val(null)
-
+    
     todoArray = todoArray.concat([
         {
             isDone: false,
