@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid'
 const inputText = $('.input-text')
 const buttonAddTodo = $('.add-item')
 const todoList = $('.todo__list')
-
 const filtrAll = $('.filtr-all')
 const filtrTodo = $('.filtr-todo')
 const filtrDone = $('.filtr-done')
@@ -35,7 +34,7 @@ const addTodo = () => {
     newTodo.appendTo(todoList)
     createTodoControls(newTodo)
     inputText.val(null)
-    
+
     todoArray = todoArray.concat([
         {
             isDone: false,
@@ -54,25 +53,16 @@ inputText.keyup(event => {
 })
 
 const createTodoControls = todoItem => {
-    const allButton = $('<div>', {
-        class: 'todo__item-all-button'
-    }).appendTo(todoItem)
-
-    const acceptedButton = $('<button>', {
-        class: 'todo__item-accepted'
-    }).appendTo(allButton)
-
-    const deleteButton = $('<button>', {
-        class: 'todo__item-deleted'
-    }).appendTo(allButton)
-
-    $('<i>', {
-        class: 'fa-solid fa-check'
-    }).appendTo(acceptedButton)
-
-    $('<i>', {
-        class: 'fa-solid fa-trash'
-    }).appendTo(deleteButton)
+    const allButton = $('<div>', {class: 'todo__item-all-button'})
+        .appendTo(todoItem)
+    const acceptedButton = $('<button>', {class: 'todo__item-accepted'})
+        .appendTo(allButton)
+    const deleteButton = $('<button>', {class: 'todo__item-deleted'})
+        .appendTo(allButton)
+    $('<i>', {class: 'fa-solid fa-check'})
+        .appendTo(acceptedButton)
+    $('<i>', {class: 'fa-solid fa-trash'})
+        .appendTo(deleteButton)
     
     deleteButton.click(event => {
         $(event.target)
@@ -86,7 +76,6 @@ const createTodoControls = todoItem => {
       
         todoArray.splice(index, 1)
     })
-
     acceptedButton.click(event => {
         $(event.target)
             .closest('li')
@@ -105,12 +94,10 @@ const filters = () => {
     filtrAll.click(() => { 
         $('.todo__item').show(500) 
     })
-
     filtrTodo.click(() => { 
         $('.todo__item').show(500)
         $('.todo__item.checked').hide(400)
     })
-
     filtrDone.click(() => {     
         $('.todo__item').hide(400)
         $('.todo__item.checked').show(500)
