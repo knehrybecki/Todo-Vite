@@ -10,12 +10,12 @@ const filtrAll = $('.filtr-all')
 const filtrTodo = $('.filtr-todo')
 const filtrDone = $('.filtr-done')
 
-let todoArray = []
+const todoArray = new Map()
 
 const createNewTodo = text => {   
     const todo = $('<li>', {
         class: 'todo__item',
-        text: text,
+        text,
         'data-id': uuidv4()
     })
 
@@ -33,15 +33,13 @@ const addTodo = () => {
 
     newTodo.appendTo(todoList)
     createTodoControls(newTodo)
-    inputText.val(null)
 
-    todoArray = todoArray.concat([
-        {
-            isDone: false,
-            text: inputText.val(),
-            id: newTodo.attr('data-id')
-        }
-    ])
+    todoArray.set(newTodo.attr('data-id'), {
+        isDone: false,
+        text: inputText.val()
+    })
+
+    inputText.val(null)
 }
 
 buttonAddTodo.click(addTodo)
@@ -59,7 +57,7 @@ const createTodoControls = todoItem => {
         .appendTo(allButton)
     const deleteButton = $('<button>', {class: 'todo__item-deleted'})
         .appendTo(allButton)
-        
+
     $('<i>', {class: 'fa-solid fa-check'})
         .appendTo(acceptedButton)
     $('<i>', {class: 'fa-solid fa-trash'})
@@ -73,9 +71,8 @@ const createTodoControls = todoItem => {
         const id = $(event.target)
             .closest('li')
             .attr('data-id')
-        const index = todoArray.findIndex(item => item.id === id)
-      
-        todoArray.splice(index, 1)
+
+        todoArray.delete(id)
     })
     acceptedButton.click(event => {
         $(event.target)
@@ -85,9 +82,8 @@ const createTodoControls = todoItem => {
         const id = $(event.target)
             .closest('li')
             .attr('data-id')
-        const index = todoArray.findIndex(item => item.id === id)
-       
-        todoArray[index].isDone = true 
+
+        todoArray.get(id).isDone = true
     })
 }
 
