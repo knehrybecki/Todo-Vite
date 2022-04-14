@@ -59,6 +59,7 @@ const createTodoControls = todoItem => {
         .appendTo(allButton)
     const deleteButton = $('<button>', {class: 'todo__item-deleted'})
         .appendTo(allButton)
+        
     $('<i>', {class: 'fa-solid fa-check'})
         .appendTo(acceptedButton)
     $('<i>', {class: 'fa-solid fa-trash'})
