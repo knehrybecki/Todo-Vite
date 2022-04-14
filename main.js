@@ -6,91 +6,84 @@ import { v4 as uuidv4 } from 'uuid'
 const inputText = $('.input-text')
 const buttonAddTodo = $('.add-item')
 const todoList = $('.todo__list')
-
 const filtrAll = $('.filtr-all')
 const filtrTodo = $('.filtr-todo')
 const filtrDone = $('.filtr-done')
 
-let todo = []
+let todoArray = new Map()
 
-const createNewTodo = getText => {
-    
-    const list = $('<li>', {
+const createNewTodo = text => {   
+    const todo = $('<li>', {
         class: 'todo__item',
-        text: getText,
+        text: text,
         'data-id': uuidv4()
     })
 
-    return list
+    return todo
 }
-
-inputText.keyup(event => event.keyCode === 13 ? addTodo() : null)
-
-buttonAddTodo.click(() => addTodo())
 
 const addTodo = () => {
     if (inputText.val() === '') {
-        alert("Please write any text")
+        alert('Please write any text')
+
+        return
     }
 
-    else {
-        const newTodo = createNewTodo(inputText.val())   
- 
-        newTodo.appendTo(todoList)
+    const newTodo = createNewTodo(inputText.val())
 
-        createTodoControls(newTodo)
+    newTodo.appendTo(todoList)
+    createTodoControls(newTodo)
 
-        todo = todo.concat([
-            {
-                isDone: false,
-                text: inputText.val(),
-                id: newTodo.attr('data-id')
-            }
-        ])
+    todoArray.set(newTodo.attr('data-id'),{
+         isDone: false, 
+         text: inputText.val()
+        })
 
-    inputText.val('')
+    inputText.val(null)
 }
 
+buttonAddTodo.click(addTodo)
+
+inputText.keyup(event => {
+    if (event.keyCode === 13) {
+        addTodo()
+    }
+})
+
 const createTodoControls = todoItem => {
-    const allButton = $('<div>', {
-        class: 'todo__item-all-button'
-    }).appendTo(todoItem)
+    const allButton = $('<div>', {class: 'todo__item-all-button'})
+        .appendTo(todoItem)
+    const acceptedButton = $('<button>', {class: 'todo__item-accepted'})
+        .appendTo(allButton)
+    const deleteButton = $('<button>', {class: 'todo__item-deleted'})
+        .appendTo(allButton)
 
-    const acceptedButton = $('<button>', {
-        class: 'todo__item-accepted'
-    }).appendTo(allButton)
-
-    $('<i>', {
-        class: 'fa-solid fa-check'
-    }).appendTo(acceptedButton)
-
-    const deleteButton = $('<button>', {
-        class: 'todo__item-deleted'
-    }).appendTo(allButton)
-
-    $('<i>', {
-        class: 'fa-solid fa-trash'
-    }).appendTo(deleteButton)
+    $('<i>', {class: 'fa-solid fa-check'})
+        .appendTo(acceptedButton)
+    $('<i>', {class: 'fa-solid fa-trash'})
+        .appendTo(deleteButton)
     
     deleteButton.click(event => {
-        event.currentTarget.parentElement.parentElement.remove()
-        const id = event.currentTarget.parentElement.parentElement.getAttribute('data-id')
-        const index = todo.findIndex(item => {
-            return item.id == id
-        })
+        $(event.target)
+            .closest('li')
+            .remove()
 
-        todo.pop(index)
+        const id = $(event.target)
+            .closest('li')
+            .attr('data-id')
+
+        todoArray.delete(id)
     })
-
     acceptedButton.click(event => {
-        event.currentTarget.parentElement.parentElement.classList.add('checked')
-        const id = event.currentTarget.parentElement.parentElement.getAttribute('data-id')
+        $(event.target)
+            .closest('li')
+            .addClass('checked')
 
-        const index = todo.findIndex(item => {
-            return item.id == id
-        })
+        const id = $(event.target)
+            .closest('li')
+            .attr('data-id')
 
-        todo[index].isDone = true 
+        todoArray.get(id).isDone = true
     })
 }
 
@@ -98,12 +91,10 @@ const filters = () => {
     filtrAll.click(() => { 
         $('.todo__item').show(500) 
     })
-
     filtrTodo.click(() => { 
         $('.todo__item').show(500)
         $('.todo__item.checked').hide(400)
     })
-
     filtrDone.click(() => {     
         $('.todo__item').hide(400)
         $('.todo__item.checked').show(500)
